@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fiori Art</title>
+  <link rel="icon" href="favicon-16x16.png" type="image/png"> 
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: url("https://wallpapers.com/images/hd/renaissance-art-sistine-chapel-nftaekn88ompfmwo.jpg") no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+      text-shadow: 1px 1px 3px black;
+    }
+
+    header {
+      background-color: rgba(201, 186, 137, 0.8);
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+
+    h1 {
+      display: inline-block;
+      border-right: 3px solid white; 
+      white-space: nowrap;
+      overflow: hidden;
+      animation: typing 3s steps(12, end), blink 0.7s step-end infinite;
+    }
+
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+
+    @keyframes blink {
+      from, to { border-color: transparent }
+      50% { border-color: white }
+    }
+
+    nav {
+      background-color: rgba(201, 186, 137, 0.8);
+      padding: 10px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    nav a {
+      color: white;
+      margin: 0 10px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+
+    nav a:hover {
+      background: rgba(255,255,255,0.2);
+      transform: translateY(-2px);
+    }
+
+    main {
+      display: flex;
+      margin: 20px;
+    }
+
+    section {
+      flex: 3;
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.4);
+      margin-right: 20px;
+      border-radius: 10px;
+    }
+
+    aside {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    footer {
+      background-color: rgba(0,0,0,0.8);
+      color: white;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .galeria-img {
+      width: 200px;
+      height: 250px;
+      object-fit: cover;
+      margin: 10px;
+      border-radius: 8px;
+      border: 2px solid #fff;
+      cursor: pointer;
+      opacity: 0;
+      transform: scale(0.8);
+      animation: aparecer 1s ease forwards;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    @keyframes aparecer {
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .galeria-img:hover {
+      transform: scale(1.15) rotate(2deg);
+      box-shadow: 0 12px 24px rgba(255,215,0,0.6);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-contenido {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 400px;
+      text-align: center;
+      position: relative;
+      color: #333;
+      text-shadow: none;
+    }
+
+    .cerrar {
+      position: absolute;
+      top: 5px;
+      right: 10px;
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: bold;
+      color: red;
+    }
+
+  
+    .artista-semana {
+      background: rgba(0, 0, 0, 0.5);
+      margin: 30px auto;
+      padding: 20px;
+      width: 80%;
+      border-radius: 15px;
+      text-align: center;
+      animation: aparecerArtista 2s ease;
+      box-shadow: 0 0 15px rgba(255,255,255,0.3);
+    }
+
+    .artista-semana img {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      margin-bottom: 15px;
+      animation: flotar 3s ease-in-out infinite;
+      object-fit: cover;
+    }
+
+    @keyframes flotar {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    @keyframes aparecerArtista {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .artista-semana h2 {
+      color: #f0e68c;
+      text-shadow: 2px 2px 5px black;
+    }
+
+    .artista-semana p {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* ===== NUEVAS CARACTERÍSTICAS AGREGADAS ===== */
+
+    /* 🎯 Quiz interactivo */
+    .quiz-box {
+      background: rgba(139, 69, 19, 0.5);
+      padding: 20px;
+      border-radius: 15px;
+      margin: 20px 0;
+      border: 3px solid rgba(255,215,0,0.4);
+    }
+
+    .quiz-box h3 {
+      color: #ffd700;
+      margin-bottom: 15px;
+    }
+
+    .quiz-btn {
+      background: linear-gradient(135deg, #c9ba89, #a08250);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 5px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    .quiz-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(255,215,0,0.5);
+    }
+
+    .quiz-resultado {
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    .correcto {
+      background: rgba(0,255,0,0.3);
+      border: 2px solid lime;
+    }
+
+    .incorrecto {
+      background: rgba(255,0,0,0.3);
+      border: 2px solid red;
+    }
+
+    /* 📅 Timeline histórica */
+    .timeline {
+      background: rgba(0,0,0,0.6);
+      padding: 30px;
+      border-radius: 15px;
+      margin: 30px auto;
+      max-width: 900px;
+    }
+
+    .timeline-item {
+      display: flex;
+      margin: 20px 0;
+      position: relative;
+      padding-left: 40px;
+      animation: deslizar 1s ease;
+    }
+
+    @keyframes deslizar {
+      from { opacity: 0; transform: translateX(-50px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: 10px;
+      top: 0;
+      width: 15px;
+      height: 15px;
+      background: #ffd700;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #ffd700;
+    }
+
+    .timeline-item::after {
+      content: '';
+      position: absolute;
+      left: 17px;
+      top: 15px;
+      width: 2px;
+      height: 100%;
+      background: linear-gradient(to bottom, #ffd700, transparent);
+    }
+
+    .timeline-content {
+      background: rgba(255,255,255,0.1);
+      padding: 15px;
+      border-radius: 10px;
+      border-left: 3px solid #ffd700;
+    }
+
+    .timeline-year {
+      color: #ffd700;
+      font-size: 1.3em;
+      font-weight: bold;
+    }
+
+    /* 🎨 Paleta de colores */
+    .paleta-colores {
+      background: rgba(0,0,0,0.6);
+      padding: 20px;
+      border-radius: 15px;
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .color-item {
+      display: inline-block;
+      width: 80px;
+      height: 80px;
+      margin: 10px;
+      border-radius: 50%;
+      border: 3px solid white;
+      cursor: pointer;
+      transition: transform 0.5s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    }
+
+    .color-item:hover {
+      transform: scale(1.2) rotate(360deg);
+    }
+
+    /* ⬆️ Botón scroll to top */
+    .scroll-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: linear-gradient(135deg, #c9ba89, #a08250);
+      color: white;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      font-size: 24px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      transition: all 0.3s ease;
+      z-index: 1000;
+      display: none;
+    }
+
+    .scroll-top:hover {
+      transform: scale(1.1) translateY(-5px);
+      box-shadow: 0 8px 25px rgba(255,215,0,0.6);
+    }
+
+    /* 📱 Responsive */
+    @media (max-width: 768px) {
+      main {
+        flex-direction: column;
+      }
+      
+      section {
+        margin-right: 0;
+        margin-bottom: 20px;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Fiori Art</h1>
+  </header>
+
+  <nav>
+    <a href="#inicio">Inicio</a>
+    <a href="#galeria">Galería</a>
+    <a href="#timeline">Historia</a>
+    <a href="#ww2">Segunda Guerra</a>
+    <a href="#contacto">Contacto</a>
+  </nav>
+
+  <main>
+    <section id="galeria">
+      <h2>Obras Famosas</h2>
+
+      <img class="galeria-img" src="https://historia-arte.com/_/eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpbSI6WyJcL2FydHdvcmtcL2ltYWdlRmlsZVwvNjFmNTBlODg1MjlmZS5qcGciLCJyZXNpemUsMjAwMCwyMDAwIl19.mfTvWD0AVBTTfObX2jDEA2lF8eqabARzjwUj7ePqJac.jpg" 
+      alt="baile-en-el-moulin-de-la-galette"
+      onclick="mostrarInfo('Baile en el Moulin de la Galette','Obra de Pierre-Auguste Renoir, pintada en 1876. Representa la vida social de París con alegría y movimiento.')">
+
+      <img class="galeria-img" src="https://historia-arte.com/_/eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpbSI6WyJcL2FydHdvcmtcL2ltYWdlRmlsZVwvcGVybGEuanBnIiwicmVzaXplLDIwMDAsMjAwMCJdfQ.P7QSbpwRsVYrcTORhHoI3q-qFjHhjv2DRE5oPeGoi00.jpg" 
+      alt="La joven de la perla"
+      onclick="mostrarInfo('La joven de la perla','Obra de Johannes Vermeer, pintada alrededor de 1665. Conocida como la Mona Lisa del norte.')">
+
+      <img class="galeria-img" src="Maria Antonieta.jpg"
+      alt="María Antonieta"
+      onclick="mostrarInfo('María Antonieta con una rosa','La pintura de María Antonieta con una rosa 1783 fue realizada por Élisabeth Vigée Le Brun y se conserva en el Palacio de Versalles. Es uno de los retratos más famosos de la reina pintados por esta artista.')"> 
+
+      <img class="galeria-img" src="El columpio.jpg"
+      alt="El columpio"
+      onclick="mostrarInfo('El columpio','Fue creada por el artista francés Jean-Honoré Fragonard entre 1767 y 1768. Se dice que un caballero de la corte le pidió al pintor que representara a su amante mientras la empujaban en un columpio mientras la admiraba en secreto desde abajo.')">
+
+      <img class="galeria-img" src="La noche estrellada sobre sena.jpg"
+      alt="La noche estrellada sobre el rio sena"
+      onclick="mostrarInfo('La noche estrellada','La noche estrellada es una obra maestra del pintor postimpresionista Vincent van Gogh, pintada en 1889 durante su estancia en un sanatorio en Saint-Rémy-de-Provence.')">
+
+      <!-- 🎨 AGREGADO: Paleta de colores -->
+      <div class="paleta-colores">
+        <h3>🎨 Paleta de Colores Famosos</h3>
+        <div style="margin-top: 20px;">
+          <div class="color-item" style="background: #1e3a8a;" title="Azul Vermeer"></div>
+          <div class="color-item" style="background: #fbbf24;" title="Amarillo Van Gogh"></div>
+          <div class="color-item" style="background: #dc2626;" title="Rojo Tiziano"></div>
+          <div class="color-item" style="background: #059669;" title="Verde Veronés"></div>
+          <div class="color-item" style="background: #ec4899;" title="Rosa Rococó"></div>
+        </div>
+      </div>
+    </section>
+
+    <aside>
+      <h3>Dato Curioso</h3>
+      <p>"Tanto en el siglo XVII como en el XIX, la innovación tecnológica jugó un papel fundamental en la evolución del arte. Mientras que la cámara oscura permitió a los pintores barrocos y clasicistas perfeccionar la perspectiva y el realismo, los tubos de óleo dieron libertad a los impresionistas para explorar la luz y el color en escenarios naturales."</p>
+
+      <!-- 🎯 AGREGADO: Quiz interactivo -->
+      <div class="quiz-box">
+        <h3>🎯 Quiz de Arte</h3>
+        <p id="pregunta-quiz">¿Quién pintó "La joven de la perla"?</p>
+        <button class="quiz-btn" onclick="responderQuiz('correcto')">Johannes Vermeer</button>
+        <button class="quiz-btn" onclick="responderQuiz('incorrecto')">Leonardo da Vinci</button>
+        <button class="quiz-btn" onclick="responderQuiz('incorrecto')">Rembrandt</button>
+        <div id="resultado-quiz" class="quiz-resultado" style="display:none;"></div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- 📅 AGREGADO: Timeline histórica -->
+  <div class="timeline" id="timeline">
+    <h2 style="text-align:center; color:#ffd700; margin-bottom:30px;">📅 Línea de Tiempo del Arte</h2>
+    
+    <div class="timeline-item">
+      <div class="timeline-content">
+        <div class="timeline-year">1400-1600</div>
+        <h4>Renacimiento</h4>
+        <p>Leonardo da Vinci, Miguel Ángel y Rafael revolucionan el arte con perspectiva y realismo.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-content">
+        <div class="timeline-year">1600-1750</div>
+        <h4>Barroco</h4>
+        <p>Caravaggio, Rembrandt y Vermeer dominan con dramatismo y juegos de luz y sombra.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-content">
+        <div class="timeline-year">1750-1820</div>
+        <h4>Neoclasicismo y Rococó</h4>
+        <p>Elegancia francesa con Fragonard y Vigée Le Brun. Arte refinado y aristocrático.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-content">
+        <div class="timeline-year">1860-1900</div>
+        <h4>Impresionismo</h4>
+        <p>Monet, Renoir y Van Gogh capturan la luz y el momento con pinceladas vibrantes.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-content">
+        <div class="timeline-year">1900-presente</div>
+        <h4>Arte Moderno</h4>
+        <p>Del cubismo al surrealismo, el arte rompe todas las reglas tradicionales.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🎨 AGREGADO: Segunda Guerra Mundial y Arte -->
+  <div class="timeline" id="ww2">
+    <h2 style="text-align:center; color:#ffd700; margin-bottom:30px;">🎨 Arte Durante la Segunda Guerra Mundial (1939-1945)</h2>
+    
+    <div class="timeline-item">
+      <div class="timeline-content">
+        <div class="timeline-year">1937</div>
+        <h4>Pablo Picasso - Guernica</h4>
+        <p>Picasso pinta el Guernica como protesta contra el bombardeo de la ciudad vasca. Se convierte en símbolo universal contra la guerra.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-content">
+        <div class="timeline-year">1940</div>
+        <h4>Marc Chagall huye a EE.UU.</h4>
+        <p>El artista judío-ruso escapa de la Europa ocupada por los nazis. Continúa pintando obras surrealistas llenas de simbolismo.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-content">
+        <div class="timeline-year">1942</div>
+        <h4>Edward Hopper - Nighthawks</h4>
+        <p>Hopper captura la soledad urbana americana durante la guerra con su icónica pintura de un café nocturno.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-content">
+        <div class="timeline-year">1943</div>
+        <h4>Wassily Kandinsky - últimas obras</h4>
+        <p>El pionero del arte abstracto crea sus últimas composiciones en París, influenciado por el conflicto mundial.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-content">
+        <div class="timeline-year">1944</div>
+        <h4>Frida Kahlo - La columna rota</h4>
+        <p>Durante la guerra, Kahlo pinta esta poderosa obra expresando dolor físico y emocional, reflejando el sufrimiento global.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-content">
+        <div class="timeline-year">1945</div>
+        <h4>Arte de Liberación</h4>
+        <p>Artistas europeos comienzan a crear obras celebrando la liberación y documentando las consecuencias del conflicto.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="artista-semana">
+    <h2>Artista de la Semana: Pierre-Auguste Renoir</h2>
+    <img src="Pierre Auguste Renoir.jpg" 
+    alt="Pierre-Auguste Renoir">
+    <p>Fue un pintor francés impresionista, que en la segunda parte de su carrera se interesó por la pintura de cuerpos femeninos en paisajes, inspirados a menudo en pinturas clásicas renacentistas y barrocas.</p>
+  </div>
+        
+  <h2 style="text-align:center;">Más sobre arte</h2>
+  <p style="text-align:center;">
+    <a href="https://www.nga.gov/" target="_blank" style="color:#ffebf3; text-shadow:1px 1px 3px black;">Ir a la página del Museo Nacional de Arte</a>
+  </p>
+
+  <p style="text-align: center;">
+    <a href="https://www.instagram.com/museelouvre/?hl=es" target="_blank" style="color: #ffebf3; text-shadow:1px 1px 3px black;">Ir al Instagram del Musée du Louvre</a>
+  </p>
+
+  <!-- ⬆️ AGREGADO: Botón scroll to top -->
+  <button class="scroll-top" id="scrollTop" onclick="scrollToTop()">⬆️</button>
+
+  <div class="modal" id="modal">
+    <div class="modal-contenido">
+      <span class="cerrar" onclick="cerrarModal()">&times;</span>
+      <h2 id="titulo-obra"></h2>
+      <p id="descripcion-obra"></p>
+    </div>
+  </div>
+
+  <script>
+    function mostrarInfo(titulo, descripcion) {
+      document.getElementById("titulo-obra").innerText = titulo;
+      document.getElementById("descripcion-obra").innerText = descripcion;
+      document.getElementById("modal").style.display = "flex";
+    }
+
+    function cerrarModal() {
+      document.getElementById("modal").style.display = "none";
+    }
+
+    // Cerrar modal al hacer clic fuera
+    window.onclick = function(event) {
+      const modal = document.getElementById("modal");
+      if (event.target == modal) {
+        cerrarModal();
+      }
+    }
+
+    // ===== FUNCIONES AGREGADAS =====
+
+    // 🎯 Quiz interactivo
+     let quizRespondido = false;
+
+    const preguntas = [
+      {
+        pregunta: "¿Quién pintó 'La joven de la perla'?",
+        respuestas: ["Johannes Vermeer", "Leonardo da Vinci", "Rembrandt"],
+        correcta: 0
+      },
+      {
+        pregunta: "¿En qué año se pintó 'La noche estrellada'?",
+        respuestas: ["1889", "1901", "1875"],
+        correcta: 0
+      },
+      {
+        pregunta: "¿Qué movimiento artístico fundó Picasso?",
+        respuestas: ["Cubismo", "Impresionismo", "Surrealismo"],
+        correcta: 0
+      }
+    ];
+
+    let indicePregunta = 0;
+
+    function mostrarPregunta() {
+      const quiz = preguntas[indicePregunta];
+      document.getElementById("pregunta-quiz").textContent = quiz.pregunta;
+
+      const botones = document.querySelectorAll(".quiz-btn");
+      botones.forEach((btn, i) => {
+        btn.textContent = quiz.respuestas[i];
+        btn.setAttribute(
+          "onclick",
+          i === quiz.correcta
+            ? "responderQuiz('correcto')"
+            : "responderQuiz('incorrecto')"
+        );
+      });
+    }
+
+    function responderQuiz(respuesta) {
+      if (quizRespondido) return;
+      quizRespondido = true;
+
+      const resultado = document.getElementById("resultado-quiz");
+      resultado.style.display = "block";
+
+      if (respuesta === "correcto") {
+        resultado.className = "quiz-resultado correcto";
+        resultado.textContent = "✅ ¡Correcto!";
+      } else {
+        resultado.className = "quiz-resultado incorrecto";
+        resultado.textContent = "❌ Incorrecto. Intenta nuevamente.";
+      }
+
+      setTimeout(() => {
+        indicePregunta = (indicePregunta + 1) % preguntas.length;
+        mostrarPregunta();
+        resultado.style.display = "none";
+        quizRespondido = false;
+      }, 2000);
+    }
+
+    mostrarPregunta();
+  </script>
+</body>
+</html>
